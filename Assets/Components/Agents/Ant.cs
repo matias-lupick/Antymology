@@ -1,4 +1,5 @@
 using UnityEngine;
+using Antymology.Terrain;
 
 public class Ant : MonoBehaviour
 {
@@ -8,17 +9,37 @@ public class Ant : MonoBehaviour
     int maxHealth = 50;
     public int health = 50;
 
-    public Ant other;
+    public bool isQueen = false;
+
+    public Ant other; //a random other ant on the same tile
+
+    int facingX = 1;
+    int facingZ = 0;
 
 
     public void Step() 
     {
         health += -ageRate;
+
+        if (WorldManager.Instance.GetBlock(Pos()) is AcidicBlock)
+            health += -ageRate;
     }
 
     public void Eat() 
     {
-        
+        if (other == null)
+        {
+            if (WorldManager.Instance.GetBlock(Pos()) is MulchBlock)
+            {
+                health += mulchHeal;
+
+                if (health > maxHealth)
+                    health = maxHealth;
+
+                WorldManager.Instance.SetBlock(Pos(), new AirBlock());
+                transform.position += Vector3.down;
+            }
+        }
     }
 
     public void Share() 
@@ -31,26 +52,52 @@ public class Ant : MonoBehaviour
 
     public void Dig() 
     {
-        
+        if (WorldManager.Instance.GetBlock(Pos()) is not ContainerBlock) 
+        {
+            WorldManager.Instance.SetBlock(Pos(), new AirBlock());
+            transform.position += Vector3.down;
+        }
     }
 
     public void Forwards() 
     {
-    
+        for (int y = 1; y >= -1; y--) 
+        {
+            if (WorldManager.Instance.GetBlock(Pos() + Vector3Int.up * (y + 1)) is AirBlock &&
+                WorldManager.Instance.GetBlock(Pos() + Vector3Int.up * y) is not AirBlock)
+            {
+                transform.position += new Vector3(facingX, y, facingZ);
+            }
+        }
     }
 
     public void TurnLeft() 
     {
-    
+        int v = facingZ;
+        facingZ = facingX;
+        facingX = -v;
     }
 
     public void TurnRight() 
     {
-        
+        int v = facingZ;
+        facingZ = -facingX;
+        facingX = v;
+    }
+
+    public void MakeNest() 
+    {
+        if (isQueen) 
+        {
+            if (health > maxHealth / 3) {
+                health += -maxHealth / 3;
+                WorldManager.Instance.SetBlock(Pos(), new NestBlock());
+            }
+        }
     }
 
     public Vector3Int Pos() 
     {
-        return new Vector3Int((int)transform.position.x, (int)transform.position.y, (int)transform.position.z);
+        return new Vector3Int((int)transform.position.x, (int)transform.position.y - 1, (int)transform.position.z);
     }
 }

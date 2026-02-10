@@ -95,6 +95,12 @@ namespace Antymology.Terrain
 
         #region Methods
 
+
+        public AbstractBlock GetBlock(Vector3Int coordinates)
+        {
+            return GetBlock(coordinates.x, coordinates.y, coordinates.z);
+        }
+
         /// <summary>
         /// Retrieves an abstract block type at the desired world coordinates.
         /// </summary>
@@ -144,6 +150,12 @@ namespace Antymology.Terrain
                 ChunkYCoordinate * LocalYCoordinate,
                 ChunkZCoordinate * LocalZCoordinate
             ];
+        }
+
+
+        public void SetBlock(Vector3Int coordinates, AbstractBlock toSet) 
+        {
+            SetBlock(coordinates.x, coordinates.y, coordinates.z, toSet );
         }
 
         /// <summary>
