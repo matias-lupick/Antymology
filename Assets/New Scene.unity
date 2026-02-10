@@ -390,8 +390,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbd0fdbaf66dc1a4488d999aa299645f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Antymology.Terrain.WorldManager
-  antPrefab: {fileID: 0}
-  blockMaterial: {fileID: 0}
+  antPrefab: {fileID: 6176117335434192302, guid: a87a104d724e6fc4f8e067c23318232e,
+    type: 3}
+  blockMaterial: {fileID: 2100000, guid: 4db9d8fce1a69b74f81daf1375c9ed88, type: 2}
 --- !u!4 &974173727
 Transform:
   m_ObjectHideFlags: 0
