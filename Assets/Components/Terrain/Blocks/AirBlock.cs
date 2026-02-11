@@ -29,6 +29,15 @@ namespace Antymology.Terrain
 
         #region Methods
 
+        public AirBlock() 
+        {
+            for (int i = 0; i < (int)PheromoneType.size; i++) 
+            {
+                pheromoneDeposits[i] = 0;
+                pheromoneDeposits[-i] = 0;
+            }
+        }
+
         /// <summary>
         /// Air blocks are going to be invisible.
         /// </summary>

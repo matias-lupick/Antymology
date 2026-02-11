@@ -13,6 +13,7 @@ public class Ant : MonoBehaviour, Tickable
 
     public Ant other; //a random other ant on the same tile
     public AirBlock airBlock;
+    public AbstractBlock groundBlock;
 
     public Brain brain = new Brain();
 
@@ -22,6 +23,7 @@ public class Ant : MonoBehaviour, Tickable
 
     public enum Action 
     {
+        none,
         eat,
         dig,
         share,
@@ -29,12 +31,14 @@ public class Ant : MonoBehaviour, Tickable
         turnRight,
         tunrLeft,
         makeNest,
+        size = 8,
     }
 
 
     void Start()
     {
         TimeManager.Instance.tickables.Add(this);
+        AntManager.Instance.ants.Add(this);
     }
 
     /// <summary>
@@ -56,6 +60,38 @@ public class Ant : MonoBehaviour, Tickable
             health += -ageRate;
 
         action = brain.GetAction(this);
+
+        switch (action)
+        {
+            case Action.none:
+                break;
+            case Action.eat:
+                Eat();
+                break;
+            case Action.dig:
+                Dig();
+                break;
+            case Action.share:
+                Share();
+                break;
+            case Action.forwards:
+                Forwards();
+                break;
+            case Action.turnRight:
+                TurnRight();
+                break;
+            case Action.tunrLeft:
+                TurnLeft();
+                break;
+            case Action.makeNest:
+                MakeNest();
+                break;
+            default:
+                break;
+        }
+
+        if (health < 0)
+            Destroy(gameObject);
     }
 
 
@@ -102,12 +138,14 @@ public class Ant : MonoBehaviour, Tickable
 
     protected void Forwards() 
     {
+        Vector3Int pos = Pos() + new Vector3Int(facingX, 0, facingZ);
+
         for (int y = 1; y >= -1; y--) 
         {
-            if (WorldManager.Instance.GetBlock(Pos() + Vector3Int.up * (y + 1)) is AirBlock &&
-                WorldManager.Instance.GetBlock(Pos() + Vector3Int.up * y) is not AirBlock)
+            if (WorldManager.Instance.GetBlock(pos + Vector3Int.up * (y + 1)) is AirBlock &&
+                WorldManager.Instance.GetBlock(pos + Vector3Int.up * y) is not AirBlock)
             {
-                transform.position += new Vector3(facingX, y, facingZ);
+                transform.position += new Vector3Int(facingX, y, facingZ);
             }
         }
     }
@@ -147,5 +185,8 @@ public class Ant : MonoBehaviour, Tickable
     {
         if (TimeManager.Instance != null)
             TimeManager.Instance.tickables.Remove(this);
+
+        if (TimeManager.Instance != null)
+            AntManager.Instance.ants.Remove(this);
     }
 }

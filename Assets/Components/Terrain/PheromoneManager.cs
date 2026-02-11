@@ -16,20 +16,13 @@ public class PheromoneManager : Singleton<PheromoneManager>, Tickable
     void Start()
     {
         TimeManager.Instance.tickables.Add(this);
+        blocks = WorldManager.Instance.GetBlocks();
     }
 
     public void Tick() 
     {
+        return;
         for (int pheromone = 0; pheromone < (int)PheromoneType.size; pheromone++) {
-
-            foreach (AbstractBlock active in blocks)
-            {
-                if (active is AirBlock)
-                {
-                    if (!((AirBlock)active).pheromoneDeposits.ContainsKey(-pheromone))
-                        ((AirBlock)active).pheromoneDeposits[-pheromone] = 0;
-                }
-            }
 
             Diffuse(pheromone, 0, 0, 1);
             Diffuse(pheromone, 0, 0, -1);
@@ -71,9 +64,9 @@ public class PheromoneManager : Singleton<PheromoneManager>, Tickable
     {
         for (int x = 1; x < blocks.GetLength(0) - 1; x++) //edges do not get pheremones
         {
-            for (int y = 1; y < blocks.GetLength(0) - 1; y++)
+            for (int y = 1; y < blocks.GetLength(1) - 1; y++)
             {
-                for (int z = 1; z < blocks.GetLength(0) - 1; z++)
+                for (int z = 1; z < blocks.GetLength(2) - 1; z++)
                 {
                     if (blocks[x, y, z] is AirBlock && blocks[x + dx, y + dy, z + dy] is AirBlock)
                     {
