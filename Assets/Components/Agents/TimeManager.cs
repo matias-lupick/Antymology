@@ -11,7 +11,7 @@ public class TimeManager : Singleton<TimeManager>
     public bool changeTickRate = false;
     public bool go = false;
 
-    public List<Tickable> data = new List<Tickable>();
+    public List<Tickable> tickables = new List<Tickable>();
 
     // Update is called once per frame
     void Update()
@@ -23,7 +23,7 @@ public class TimeManager : Singleton<TimeManager>
         {
             for (int i = 0; i < ticksPerFrame; i++)
             {
-                foreach (Tickable active in data)
+                foreach (Tickable active in tickables)
                 {
                     active.Tick();
                 }

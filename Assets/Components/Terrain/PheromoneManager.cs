@@ -13,6 +13,10 @@ public class PheromoneManager : Singleton<PheromoneManager>, Tickable
     private AbstractBlock[,,] blocks;
 
 
+    void Start()
+    {
+        TimeManager.Instance.tickables.Add(this);
+    }
 
     public void Tick() 
     {

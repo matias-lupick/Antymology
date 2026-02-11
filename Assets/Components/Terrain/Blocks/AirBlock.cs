@@ -23,7 +23,7 @@ namespace Antymology.Terrain
         /// <summary>
         /// A dictionary representing the phermone deposits in the air.
         /// </summary>
-        public Dictionary<int, double> pheromoneDeposits;
+        public Dictionary<int, double> pheromoneDeposits = new Dictionary<int, double>();
 
         #endregion
 

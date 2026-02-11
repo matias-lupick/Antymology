@@ -12,11 +12,16 @@ public class Ant : MonoBehaviour, Tickable
     public bool isQueen = false;
 
     public Ant other; //a random other ant on the same tile
-    public AirBlock block;
+    public AirBlock airBlock;
 
     int facingX = 1;
     int facingZ = 0;
 
+
+    void Start() 
+    {
+        TimeManager.Instance.tickables.Add(this);
+    }
 
     public void Tick() 
     {
@@ -97,7 +102,7 @@ public class Ant : MonoBehaviour, Tickable
     {
         if (isQueen) 
         {
-            if (health > maxHealth / 3) {
+            if (health > maxHealth / 3 && WorldManager.Instance.GetBlock(Pos()) is not ContainerBlock) {
                 health += -maxHealth / 3;
                 WorldManager.Instance.SetBlock(Pos(), new NestBlock());
             }
@@ -107,5 +112,11 @@ public class Ant : MonoBehaviour, Tickable
     public Vector3Int Pos() 
     {
         return new Vector3Int((int)transform.position.x, (int)transform.position.y - 1, (int)transform.position.z);
+    }
+
+
+    void OnDestroy() 
+    {
+        TimeManager.Instance.tickables.Remove(this);
     }
 }
