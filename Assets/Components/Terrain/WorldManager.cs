@@ -88,7 +88,24 @@ namespace Antymology.Terrain
         /// </summary>
         private void GenerateAnts()
         {
-            throw new NotImplementedException();
+            int antCount = 50;
+            Vector3Int antPosition = new Vector3Int(
+                Blocks.GetLength(0) / 2, Blocks.GetLength(1), Blocks.GetLength(2) / 2);
+
+            for (int y = 1; y < Blocks.GetLength(1); y++) 
+            {
+                if (GetBlock(antPosition + y * Vector3Int.down) is not AirBlock) 
+                {
+                    antPosition = new Vector3Int(antPosition.x, antPosition.y - y + 1, antPosition.z);
+                }
+            }
+
+            for (int i = 0; i < antCount - 1; i++) 
+            {
+                Instantiate(antPrefab, antPosition, Quaternion.identity);
+            }
+            Instantiate(antPrefab, antPosition, Quaternion.identity).
+                GetComponent<Ant>().MakeQueen();
         }
 
         #endregion

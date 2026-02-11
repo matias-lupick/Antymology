@@ -22,11 +22,12 @@ public class PheromoneManager : Singleton<PheromoneManager>, Tickable
     {
         for (int pheromone = 0; pheromone < (int)PheromoneType.size; pheromone++) {
 
-            foreach (AbstractBlock active in blocks) 
+            foreach (AbstractBlock active in blocks)
             {
-                if (active is AirBlock) 
+                if (active is AirBlock)
                 {
-                    ((AirBlock)active).pheromoneDeposits[-pheromone] = 0;
+                    if (!((AirBlock)active).pheromoneDeposits.ContainsKey(-pheromone))
+                        ((AirBlock)active).pheromoneDeposits[-pheromone] = 0;
                 }
             }
 
@@ -52,6 +53,14 @@ public class PheromoneManager : Singleton<PheromoneManager>, Tickable
                 if (active is AirBlock)
                 {
                     ((AirBlock)active).pheromoneDeposits[pheromone] = ((AirBlock)active).pheromoneDeposits[-pheromone];
+                }
+            }
+
+            foreach (AbstractBlock active in blocks)
+            {
+                if (active is AirBlock)
+                {
+                    ((AirBlock)active).pheromoneDeposits[-pheromone] = 0;
                 }
             }
         }
@@ -80,10 +89,11 @@ public class PheromoneManager : Singleton<PheromoneManager>, Tickable
 
 public enum PheromoneType 
 {
-    ant = 0,
-    food = 1,
-    nest = 2,
-    size = 3,
+    ant = 0,  //released by all ants
+    nest = 1, //released by nest blocks (not implemented)
+    red = 2,  //released by ant brain
+    blue = 3, //released by ant brain
+    size = 4,
 }
 
 [System.Serializable]

@@ -14,24 +14,52 @@ public class Ant : MonoBehaviour, Tickable
     public Ant other; //a random other ant on the same tile
     public AirBlock airBlock;
 
+    public Brain brain = new Brain();
+
     int facingX = 1;
     int facingZ = 0;
 
 
-    void Start() 
+    public enum Action 
+    {
+        eat,
+        dig,
+        share,
+        forwards,
+        turnRight,
+        tunrLeft,
+        makeNest,
+    }
+
+
+    void Start()
     {
         TimeManager.Instance.tickables.Add(this);
     }
 
+    /// <summary>
+    /// Makes this ant a queen ant
+    /// </summary>
+    public void MakeQueen() 
+    {
+        isQueen = true;
+        transform.GetChild(0).transform.localScale = Vector3.one * 2;
+    }
+
     public void Tick() 
     {
+        Action action;
+
         health += -ageRate;
 
         if (WorldManager.Instance.GetBlock(Pos()) is AcidicBlock)
             health += -ageRate;
+
+        action = brain.GetAction(this);
     }
 
-    public void Eat() 
+
+    protected void Eat() 
     {
         if (other == null)
         {
@@ -48,7 +76,7 @@ public class Ant : MonoBehaviour, Tickable
         }
     }
 
-    public void Share() 
+    protected void Share() 
     {
         if (other != null)
         {
@@ -60,7 +88,7 @@ public class Ant : MonoBehaviour, Tickable
         }
     }
 
-    public void Dig() 
+    protected void Dig() 
     {
         if (other == null)
         {
@@ -72,7 +100,7 @@ public class Ant : MonoBehaviour, Tickable
         }
     }
 
-    public void Forwards() 
+    protected void Forwards() 
     {
         for (int y = 1; y >= -1; y--) 
         {
@@ -84,21 +112,21 @@ public class Ant : MonoBehaviour, Tickable
         }
     }
 
-    public void TurnLeft() 
+    protected void TurnLeft() 
     {
         int v = facingZ;
         facingZ = facingX;
         facingX = -v;
     }
 
-    public void TurnRight() 
+    protected void TurnRight() 
     {
         int v = facingZ;
         facingZ = -facingX;
         facingX = v;
     }
 
-    public void MakeNest() 
+    protected void MakeNest() 
     {
         if (isQueen) 
         {
@@ -117,6 +145,7 @@ public class Ant : MonoBehaviour, Tickable
 
     void OnDestroy() 
     {
-        TimeManager.Instance.tickables.Remove(this);
+        if (TimeManager.Instance != null)
+            TimeManager.Instance.tickables.Remove(this);
     }
 }
