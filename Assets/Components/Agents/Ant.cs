@@ -6,7 +6,7 @@ public class Ant : MonoBehaviour, Tickable
     int ageRate = 1;
     int mulchHeal = 20;
 
-    int maxHealth = 50;
+    public int maxHealth = 50;
     public int health = 50;
 
     public bool isQueen = false;
@@ -15,7 +15,7 @@ public class Ant : MonoBehaviour, Tickable
     public AirBlock airBlock;
     public AbstractBlock groundBlock;
 
-    public Brain brain = new Brain();
+    public Brain brain;
 
     int facingX = 1;
     int facingZ = 0;
@@ -39,6 +39,7 @@ public class Ant : MonoBehaviour, Tickable
     {
         TimeManager.Instance.tickables.Add(this);
         AntManager.Instance.ants.Add(this);
+        brain = new Brain();
     }
 
     /// <summary>

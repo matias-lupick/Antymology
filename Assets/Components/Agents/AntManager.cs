@@ -53,6 +53,7 @@ public class AntManager : Singleton<AntManager>, Tickable
         foreach (Ant active in ants)
         {
             active.airBlock = (AirBlock)WorldManager.Instance.GetBlock(active.Pos() + Vector3Int.up);
+            active.groundBlock = WorldManager.Instance.GetBlock(active.Pos());
         }
     }
 }

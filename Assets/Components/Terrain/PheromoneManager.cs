@@ -73,6 +73,10 @@ public class PheromoneManager : Singleton<PheromoneManager>, Tickable
                         ((AirBlock)blocks[x, y, z]).pheromoneDeposits[-pheromone] =
                             ((AirBlock)blocks[x + dx, y + dy, z + dy]).pheromoneDeposits[pheromone] *
                             properties[pheromone].diffusionPercent;
+
+                        ((AirBlock)blocks[x + dx, y + dy, z + dy]).pheromoneDeposits[-pheromone] +=
+                            -((AirBlock)blocks[x + dx, y + dy, z + dy]).pheromoneDeposits[pheromone] *
+                            properties[pheromone].diffusionPercent;
                     }
                 }
             }
