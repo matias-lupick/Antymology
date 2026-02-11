@@ -1,7 +1,7 @@
 using UnityEngine;
 using Antymology.Terrain;
 
-public class Ant : MonoBehaviour
+public class Ant : MonoBehaviour, Tickable
 {
     int ageRate = 1;
     int mulchHeal = 20;
@@ -12,12 +12,13 @@ public class Ant : MonoBehaviour
     public bool isQueen = false;
 
     public Ant other; //a random other ant on the same tile
+    public AirBlock block;
 
     int facingX = 1;
     int facingZ = 0;
 
 
-    public void Step() 
+    public void Tick() 
     {
         health += -ageRate;
 
@@ -44,18 +45,25 @@ public class Ant : MonoBehaviour
 
     public void Share() 
     {
-        if (health > 10 && other.health < maxHealth - 10) { 
-            other.health += 10;
-            health += -10;
+        if (other != null)
+        {
+            if (health > 10 && other.health < maxHealth - 10)
+            {
+                other.health += 10;
+                health += -10;
+            }
         }
     }
 
     public void Dig() 
     {
-        if (WorldManager.Instance.GetBlock(Pos()) is not ContainerBlock) 
+        if (other == null)
         {
-            WorldManager.Instance.SetBlock(Pos(), new AirBlock());
-            transform.position += Vector3.down;
+            if (WorldManager.Instance.GetBlock(Pos()) is not ContainerBlock)
+            {
+                WorldManager.Instance.SetBlock(Pos(), new AirBlock());
+                transform.position += Vector3.down;
+            }
         }
     }
 

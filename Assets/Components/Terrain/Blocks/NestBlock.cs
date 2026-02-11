@@ -20,6 +20,7 @@ namespace Antymology.Terrain
         /// </summary>
         private static bool _isVisible = true;
 
+
         #endregion
 
         #region Methods
