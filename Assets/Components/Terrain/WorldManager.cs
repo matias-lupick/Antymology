@@ -81,6 +81,8 @@ namespace Antymology.Terrain
             Camera.main.transform.LookAt(new Vector3(Blocks.GetLength(0), 0, Blocks.GetLength(2)));
 
             GenerateAnts();
+            EvolutionManager.Instance.Next();
+            
         }
 
         /// <summary>
@@ -88,20 +90,24 @@ namespace Antymology.Terrain
         /// </summary>
         private void GenerateAnts()
         {
-            int antCount = 50;
+            int antCount = 2;
             Vector3Int antPosition = new Vector3Int(
                 Blocks.GetLength(0) / 2, Blocks.GetLength(1), Blocks.GetLength(2) / 2);
-
+            
+            //Debug.Log(Blocks.GetLength(1));
             for (int y = 1; y < Blocks.GetLength(1); y++) 
             {
+                //Debug.Log(y);
                 if (GetBlock(antPosition + y * Vector3Int.down) is not AirBlock) 
                 {
                     antPosition = new Vector3Int(antPosition.x, antPosition.y - y + 1, antPosition.z);
+                    break;
                 }
             }
 
             for (int i = 0; i < antCount - 1; i++) 
             {
+                //Debug.Log(antPosition);
                 Instantiate(antPrefab, antPosition, Quaternion.identity);
             }
             Instantiate(antPrefab, antPosition, Quaternion.identity).
@@ -111,6 +117,30 @@ namespace Antymology.Terrain
         #endregion
 
         #region Methods
+
+        public void GenerateWorld() 
+        {
+            //int score = 0;
+
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                    for (int z = 0; z < Blocks.GetLength(2); z++)
+                    {
+                        //if (Blocks[x, y, z] is NestBlock)
+                        //    score++;
+                        Blocks[x, y, z] = new AirBlock();
+                    }
+            //EvolutionManager.Instance.ReportScore(score * 1000);
+
+            // Generate new random number generator
+            RNG = new System.Random(ConfigurationManager.Instance.Seed);
+
+            // Generate new simplex noise generator
+            SimplexNoise = new SimplexNoise(ConfigurationManager.Instance.Seed);
+            GenerateData();
+            GenerateAnts();
+            EvolutionManager.Instance.Next();
+        }
 
 
         public AbstractBlock GetBlock(Vector3Int coordinates)

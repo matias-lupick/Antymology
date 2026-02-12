@@ -61,7 +61,7 @@ namespace Antymology.Terrain
             mesh = gameObject.AddComponent<MeshFilter>().mesh;
             renderer = gameObject.AddComponent<MeshRenderer>();
             renderer.material = mat;
-            collider = gameObject.AddComponent<MeshCollider>();
+            //collider = gameObject.AddComponent<MeshCollider>();
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Antymology.Terrain
             // Optimize, and normal calculation
             MeshUtility.Optimize(mesh);
             mesh.RecalculateNormals();
-            collider.sharedMesh = mesh;
+            //collider.sharedMesh = mesh;
         }
 
         #endregion

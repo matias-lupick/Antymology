@@ -35,11 +35,11 @@ public class TimeManager : Singleton<TimeManager>
             {
                 if (time2 - time1 > secondsPerFrame)
                 {
-                    ticksPerFrame += 1;
+                    ticksPerFrame += -1;
                 }
                 else
                 {
-                    ticksPerFrame += -1;
+                    ticksPerFrame += 1;
                 }
             }
         }

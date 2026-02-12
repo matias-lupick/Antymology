@@ -3,15 +3,20 @@ using Antymology.Terrain;
 
 public class Brain
 {
-    float[] input;
+    public float[] input;
     public BrainLayer[] layers;
-    float[] output;
+    public float[] output;
 
 
     /// <summary>
     /// number of values to route form output back into input
     /// </summary>
     int memorySize = 2;
+
+    /// <summary>
+    /// The score the ants using this brain recieved
+    /// </summary>
+    public int score = -1;
 
     public Brain() 
     {
@@ -22,6 +27,33 @@ public class Brain
         layers = new BrainLayer[1];
         layers[0] = new BrainLayer(input, output);
         layers[0].InitRandom();
+    }
+
+    public Brain(Brain template) 
+    {
+        input = new float[memorySize + (int)PheromoneType.size + 7];
+        output = new float[(int)Ant.Action.size + memorySize];
+
+        layers = new BrainLayer[template.layers.Length];
+        for (int i = 0; i < template.layers.Length; i++) 
+        {
+            layers[i] = new BrainLayer(template.layers[i]);
+        }
+
+        layers[0].input = input;
+        layers[layers.Length - 1].output = output;
+    }
+
+    public Brain Clone() 
+    {
+        Brain v = new Brain(this);
+
+        for (int i = 0; i < layers.Length; i++)
+            v.layers[i] = layers[i].Clone();
+        v.layers[0].input = v.input;
+        v.layers[layers.Length - 1].output = v.output;
+
+        return v;
     }
 
     public Ant.Action GetAction(Ant d) 
@@ -62,6 +94,7 @@ public class Brain
             {
                 best = output[i];
                 action = i;
+                //
             }
         }
 
@@ -73,6 +106,39 @@ public class Brain
 
         return (Ant.Action)action;
     }
+
+    public void Reset() 
+    {
+        for (int i = input.Length - 1; i >= input.Length - 1 - (int)Ant.Action.size; i--)
+            input[i] = 0f;
+        score = 0;
+    }
+
+
+    public void Mutate(float probability, float additive, float multiplicative) 
+    {
+        foreach (BrainLayer v in layers) {
+            v.Mutate(probability, additive, multiplicative); 
+        }
+    }
+
+
+    public void TestUnique(Brain v) 
+    {
+        if (input == v.input)
+            Debug.Log("Sim: " + 1);
+        if (output == v.output)
+            Debug.Log("Sim: " + 2);
+        if (layers[0].input == v.layers[0].input)
+            Debug.Log("Sim: " + 3);
+        if (layers[layers.Length - 1].output == v.layers[v.layers.Length - 1].output)
+            Debug.Log("Sim: " + 4);
+        if (layers[0].weights == v.layers[0].weights)
+            Debug.Log("Sim: " + 5);
+        if (layers[0].bias == v.layers[0].bias)
+            Debug.Log("Sim: " + 6);
+    }
+
 
     public class BrainLayer 
     {
@@ -99,15 +165,27 @@ public class Brain
             bias = new float[outSize];
         }
 
+        public BrainLayer(BrainLayer template)
+        {
+            input = template.input;
+            output = template.output;
+
+            inSize = input.Length;
+            outSize = output.Length;
+
+            weights = template.weights;
+            bias = template.bias;
+        }
+
         public void InitRandom() 
         {
             for (int i = 0; i < outSize; i++) 
             {
-                bias[i] = Random.Range(-1f, 1f);
+                bias[i] = Random.Range(0f, 0.01f);
 
                 for (int j = 0; j < inSize; j++)
                 {
-                    weights[j, i] = Random.Range(-1f, 1f);
+                    weights[j, i] = Random.Range(0f, 0.01f);
                 }
             }
         }
@@ -120,6 +198,42 @@ public class Brain
                 for (int i = 0; i < inSize; i++)
                 {
                     output[j] += weights[i, j] * input[i];
+                }
+            }
+
+            
+        }
+
+        public BrainLayer Clone() 
+        {
+            BrainLayer v = new BrainLayer(input, output);
+
+            for (int i = 0; i < outSize; i++)
+            {
+                v.bias[i] = bias[i];
+
+                for (int j = 0; j < inSize; j++)
+                {
+                    v.weights[j, i] = weights[j, i];
+                }
+            }
+
+            return v;
+        }
+
+
+        public void Mutate(float probability, float add, float mult)
+        {
+            for (int i = 0; i < outSize; i++)
+            {
+                if (Random.Range(0f, 1f) < probability)
+                    bias[i] = bias[i] * (1f + Random.Range(-mult, mult)) + 
+                        Random.Range(-add, add);
+
+                for (int j = 0; j < inSize; j++)
+                {
+                    weights[j, i] = weights[j, i] * (1f + Random.Range(-mult, mult)) +
+                        Random.Range(-add, add);
                 }
             }
         }

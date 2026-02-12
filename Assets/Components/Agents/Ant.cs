@@ -35,11 +35,11 @@ public class Ant : MonoBehaviour, Tickable
     }
 
 
-    void Start()
+    void Awake()
     {
         TimeManager.Instance.tickables.Add(this);
         AntManager.Instance.ants.Add(this);
-        brain = new Brain();
+        //brain = new Brain();
     }
 
     /// <summary>
@@ -109,6 +109,8 @@ public class Ant : MonoBehaviour, Tickable
 
                 WorldManager.Instance.SetBlock(Pos(), new AirBlock());
                 transform.position += Vector3.down;
+
+                AntManager.Instance.eaten += 1;
             }
         }
     }
@@ -129,10 +131,19 @@ public class Ant : MonoBehaviour, Tickable
     {
         if (other == null)
         {
+            if (WorldManager.Instance.GetBlock(Pos()) is MulchBlock)
+            {
+                Eat();
+                return;
+            }
+
             if (WorldManager.Instance.GetBlock(Pos()) is not ContainerBlock)
             {
                 WorldManager.Instance.SetBlock(Pos(), new AirBlock());
                 transform.position += Vector3.down;
+
+                if (groundBlock is NestBlock)
+                    AntManager.Instance.nests += -1;
             }
         }
     }
@@ -172,6 +183,9 @@ public class Ant : MonoBehaviour, Tickable
             if (health > maxHealth / 3 && WorldManager.Instance.GetBlock(Pos()) is not ContainerBlock) {
                 health += -maxHealth / 3;
                 WorldManager.Instance.SetBlock(Pos(), new NestBlock());
+
+                if (groundBlock is not NestBlock)
+                    AntManager.Instance.nests += 1;
             }
         }
     }
