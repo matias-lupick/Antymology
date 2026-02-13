@@ -140,6 +140,14 @@ namespace Antymology.Terrain
             GenerateData();
             GenerateAnts();
             EvolutionManager.Instance.Next();
+
+            for (int x = 0; x < Chunks.GetLength(0); x++)
+                for (int y = 0; y < Chunks.GetLength(1); y++)
+                    for (int z = 0; z < Chunks.GetLength(2); z++)
+                    {
+                        Chunks[x,y,z].updateNeeded = true;
+                    }
+            
         }
 
 

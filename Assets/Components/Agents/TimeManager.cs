@@ -8,6 +8,8 @@ public class TimeManager : Singleton<TimeManager>
     /// </summary>
     public double secondsPerFrame = 1f;
     public int ticksPerFrame = 1;
+    public float timePerTick = 0f;
+    float timeInTick = 0f;
     public bool changeTickRate = false;
     public bool go = false;
 
@@ -21,6 +23,13 @@ public class TimeManager : Singleton<TimeManager>
 
         if (go)
         {
+            timeInTick += Time.deltaTime;
+            if (timeInTick < timePerTick) 
+            {
+                return;
+            }
+            timeInTick = 0f;
+
             for (int i = 0; i < ticksPerFrame; i++)
             {
                 foreach (Tickable active in tickables)

@@ -4,7 +4,7 @@ public class EvolutionManager : Singleton<EvolutionManager>
 {
     public Brain[] inTrial;
 
-    int generationSize = 10;
+    int generationSize = 12;
     int onTrial = -1;
 
     [SerializeField] float probability = 0.01f;
@@ -48,7 +48,7 @@ public class EvolutionManager : Singleton<EvolutionManager>
         Brain[] nextGen = new Brain[generationSize];
 
 
-        for (int i = 0; i < generationSize / 2; i++) 
+        for (int i = 0; i < generationSize / 3; i++) 
         {
             high = -1;
             highInd = 0;
@@ -72,9 +72,11 @@ public class EvolutionManager : Singleton<EvolutionManager>
             }
 
             inTrial[highInd].Reset();
-            nextGen[i * 2] = inTrial[highInd];
-            nextGen[i * 2 + 1] = inTrial[highInd].Clone();
-            nextGen[i * 2 + 1].Mutate(probability, additive, multiplicative);
+            nextGen[i * 3] = inTrial[highInd].Clone();
+            nextGen[i * 3 + 1] = inTrial[highInd].Clone();
+            nextGen[i * 3 + 1].Mutate(probability, additive, multiplicative);
+            nextGen[i * 3 + 2] = inTrial[highInd].Clone();
+            nextGen[i * 3 + 2].Mutate(probability, additive, multiplicative);
 
             //nextGen[i * 2].TestUnique(nextGen[i * 2 + 1]);
 

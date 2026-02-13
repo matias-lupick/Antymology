@@ -11,17 +11,20 @@ public class Brain
     /// <summary>
     /// number of values to route form output back into input
     /// </summary>
-    int memorySize = 2;
+    int memorySize = 5;
 
     /// <summary>
     /// The score the ants using this brain recieved
     /// </summary>
     public int score = -1;
 
+    int trueInputSize = 8;
+
     public Brain() 
     {
-        //3 for block type, 1 for random, 1 for hunger, 1 for is queen, 1 for neighbor
-        input = new float[memorySize + (int)PheromoneType.size + 7];
+        //3 for block type, 1 for random, 1 for hunger,
+        //1 for is queen, 1 for neighbor, 1 for cliff
+        input = new float[memorySize + (int)PheromoneType.size + trueInputSize];
         output = new float[(int)Ant.Action.size + memorySize];
 
         layers = new BrainLayer[1];
@@ -31,7 +34,7 @@ public class Brain
 
     public Brain(Brain template) 
     {
-        input = new float[memorySize + (int)PheromoneType.size + 7];
+        input = new float[memorySize + (int)PheromoneType.size + trueInputSize];
         output = new float[(int)Ant.Action.size + memorySize];
 
         layers = new BrainLayer[template.layers.Length];
@@ -79,6 +82,7 @@ public class Brain
         input[count++] = d.groundBlock is NestBlock ? 1f : 0f;
         input[count++] = d.isQueen ? 1f : 0f;
         input[count++] = d.other == null ? 1f : 0f;
+        input[count++] = d.IsCliff() ? 1f : 0f;
         input[count++] = (float)d.health / d.maxHealth;
         input[count++] = Random.Range(0f, 1f);
 

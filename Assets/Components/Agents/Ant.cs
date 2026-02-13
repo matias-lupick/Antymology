@@ -162,6 +162,22 @@ public class Ant : MonoBehaviour, Tickable
         }
     }
 
+    public bool IsCliff() 
+    {
+        Vector3Int pos = Pos() + new Vector3Int(facingX, 0, facingZ);
+
+        for (int y = 1; y >= -1; y--)
+        {
+            if (WorldManager.Instance.GetBlock(pos + Vector3Int.up * (y + 1)) is AirBlock &&
+                WorldManager.Instance.GetBlock(pos + Vector3Int.up * y) is not AirBlock)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected void TurnLeft() 
     {
         int v = facingZ;
