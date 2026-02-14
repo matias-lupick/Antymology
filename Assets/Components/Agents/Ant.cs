@@ -53,7 +53,7 @@ public class Ant : MonoBehaviour, Tickable
 
     public void Tick() 
     {
-        if (health < 0)
+        if (health < 0 || AntManager.Instance.queenDead)
             return;
 
         Action action;

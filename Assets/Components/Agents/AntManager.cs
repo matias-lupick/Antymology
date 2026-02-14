@@ -18,7 +18,7 @@ public class AntManager : Singleton<AntManager>, Tickable
         TimeManager.Instance.tickables.Add(this);
     }
 
-    void Update() 
+    public void Update() 
     {
         //Check end
         if (queenDead)

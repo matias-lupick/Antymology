@@ -16,7 +16,7 @@ public class Brain
     /// <summary>
     /// number of values to route form output back into input
     /// </summary>
-    int memorySize = 5;
+    int memorySize = 3;
 
     /// <summary>
     /// The score the ants using this brain recieved
@@ -109,7 +109,7 @@ public class Brain
         input[count++] = d.other == null ? 1f : 0f;
         input[count++] = d.IsCliff() ? 1f : 0f;
         input[count++] = d.IsOpen() ? 1f : 0f;
-        input[count++] = (float)d.health / d.maxHealth;
+        input[count++] = ((float)d.health) / d.maxHealth;
         input[count++] = UnityEngine.Random.Range(0f, 1f);
 
         for (int i = 0; i < layers.Length; i++) 

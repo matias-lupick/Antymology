@@ -6,11 +6,11 @@ public class TimeManager : Singleton<TimeManager>
     /// <summary>
     /// Increases ticks per update until frame rate matches value
     /// </summary>
-    public double secondsPerFrame = 1f;
+    double secondsPerFrame = 1f;
     public int ticksPerFrame = 1;
     public float timePerTick = 0f;
     float timeInTick = 0f;
-    public bool changeTickRate = false;
+    bool changeTickRate = false;
     public bool go = false;
 
     public List<Tickable> tickables = new List<Tickable>();
@@ -51,6 +51,7 @@ public class TimeManager : Singleton<TimeManager>
                     ticksPerFrame += 1;
                 }
             }
+
         }
     }
 }

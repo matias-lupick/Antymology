@@ -482,12 +482,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54c868cb4bdf2724aa436a88cdf3b38c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EvolutionManager
-  probability: 0.03
+  generationSize: 12
+  offspringCount: 4
+  probability: 0.05
   additive: 0.1
-  multiplicative: 0.75
+  multiplicative: 0
   logResults: 1
-  loadTrait: TestSave
-  saveTrait: TestSave
+  loadTrait: SampleRun7
+  saveTrait: 
   saveAtEnd: 0
 --- !u!4 &762157811
 Transform:
@@ -724,7 +726,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 89.08865, y: 0, z: 0, w: 19.445343}
+  m_margin: {x: 89.08865, y: 0, z: -32.3125, w: 19.445343}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -815,8 +817,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeManager
   secondsPerFrame: 1
-  ticksPerFrame: 60
-  timePerTick: 0
+  ticksPerFrame: 1
+  timePerTick: 0.05
   changeTickRate: 0
   go: 1
 --- !u!4 &1170860277

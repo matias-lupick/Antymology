@@ -4,7 +4,9 @@ public class EvolutionManager : Singleton<EvolutionManager>
 {
     public Brain[] inTrial;
 
-    int generationSize = 12;
+    [SerializeField] int generationSize = 12;
+    [SerializeField] int offspringCount = 4;
+
     int onTrial = -1;
     int generationCount = 0;
 
@@ -62,12 +64,14 @@ public class EvolutionManager : Singleton<EvolutionManager>
     {
         int high;
         int highInd;
+        int logBest = 0;
+        int logPass = 0;
 
         Brain[] nextGen = new Brain[generationSize];
 
         generationCount += 1;
 
-        for (int i = 0; i < generationSize / 3; i++) 
+        for (int i = 0; i < generationSize / offspringCount; i++) 
         {
             high = -1;
             highInd = 0;
@@ -89,7 +93,7 @@ public class EvolutionManager : Singleton<EvolutionManager>
                 if (logResults)
                 {
                     Debug.Log("End of Generation " + generationCount);
-                    Debug.Log("Best: " + high);
+                    logBest = high;
                 }
 
                 if (saveAtEnd) 
@@ -99,18 +103,25 @@ public class EvolutionManager : Singleton<EvolutionManager>
                 }
             }
 
+            if (i == generationSize / offspringCount - 1 && logResults)
+                logPass = high;
+
             inTrial[highInd].Reset();
-            nextGen[i * 3] = inTrial[highInd].Clone();
-            nextGen[i * 3 + 1] = inTrial[highInd].Clone();
-            nextGen[i * 3 + 1].Mutate(probability, additive, multiplicative);
-            nextGen[i * 3 + 2] = inTrial[highInd].Clone();
-            nextGen[i * 3 + 2].Mutate(probability, additive, multiplicative);
+            nextGen[i * offspringCount] = inTrial[highInd].Clone();
 
-            //nextGen[i * 2].TestUnique(nextGen[i * 2 + 1]);
-
+            for (int j = 1; j < offspringCount; j++)
+            {
+                nextGen[i * offspringCount + j] = inTrial[highInd].Clone();
+                nextGen[i * offspringCount + j].Mutate(probability, additive, multiplicative);
+            }
 
             inTrial[highInd] = null;
             
+        }
+
+        if (logResults) 
+        {
+            Debug.Log("Best: " + logBest + "  Pass: " + logPass);
         }
 
         inTrial = nextGen;
