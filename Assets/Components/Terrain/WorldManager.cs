@@ -1,5 +1,5 @@
 ﻿using Antymology.Helpers;
-using System;
+//using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -90,28 +90,40 @@ namespace Antymology.Terrain
         /// </summary>
         private void GenerateAnts()
         {
-            int antCount = 2;
+            int antCount = 10;
             Vector3Int antPosition = new Vector3Int(
                 Blocks.GetLength(0) / 2, Blocks.GetLength(1), Blocks.GetLength(2) / 2);
-            
-            //Debug.Log(Blocks.GetLength(1));
-            for (int y = 1; y < Blocks.GetLength(1); y++) 
-            {
-                //Debug.Log(y);
-                if (GetBlock(antPosition + y * Vector3Int.down) is not AirBlock) 
-                {
-                    antPosition = new Vector3Int(antPosition.x, antPosition.y - y + 1, antPosition.z);
-                    break;
-                }
-            }
 
-            for (int i = 0; i < antCount - 1; i++) 
+            //Debug.Log(Blocks.GetLength(1));
+            for (int i = 0; i < antCount - 1; i++)
             {
-                //Debug.Log(antPosition);
-                Instantiate(antPrefab, antPosition, Quaternion.identity);
+                antPosition = new Vector3Int(antPosition.x, Blocks.GetLength(1), antPosition.z);
+                for (int y = 1; y < Blocks.GetLength(1); y++)
+                {
+                    //Debug.Log(y);
+                    if (GetBlock(antPosition + y * Vector3Int.down) is not AirBlock)
+                    {
+                        antPosition = new Vector3Int(antPosition.x, antPosition.y - y + 1, antPosition.z);
+                        break;
+                    }
+                }
+
+                if (i == antCount / 2)
+                    Instantiate(antPrefab, antPosition, Quaternion.identity).
+                        GetComponent<Ant>().MakeQueen();
+                else
+                    Instantiate(antPrefab, antPosition, Quaternion.identity);
+
+                if (Random.Range(0f, 1f) > 0.6f)
+                    antPosition = antPosition + Vector3Int.right;
+                if (Random.Range(0f, 1f) > 0.6f)
+                    antPosition = antPosition + Vector3Int.left;
+                if (Random.Range(0f, 1f) > 0.6f)
+                    antPosition = antPosition + Vector3Int.forward;
+                if (Random.Range(0f, 1f) > 0.6f)
+                    antPosition = antPosition + Vector3Int.back;
             }
-            Instantiate(antPrefab, antPosition, Quaternion.identity).
-                GetComponent<Ant>().MakeQueen();
+            
         }
 
         #endregion
