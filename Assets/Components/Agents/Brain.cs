@@ -63,7 +63,7 @@ public class Brain
         layers[0] = new BrainLayer(input, output);
         layers[0].weights = layer.weights;
         layers[0].bias = layer.bias;
-        layers[0].InitRandom();
+        //layers[0].InitRandom();
     }
 
     public Brain Clone() 

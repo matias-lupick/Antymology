@@ -486,6 +486,9 @@ MonoBehaviour:
   additive: 0.1
   multiplicative: 0.75
   logResults: 1
+  loadTrait: TestSave
+  saveTrait: TestSave
+  saveAtEnd: 0
 --- !u!4 &762157811
 Transform:
   m_ObjectHideFlags: 0

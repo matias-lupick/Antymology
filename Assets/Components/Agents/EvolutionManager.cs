@@ -32,6 +32,7 @@ public class EvolutionManager : Singleton<EvolutionManager>
         }
         else 
         {
+            Debug.Log("Loading brain");
             for (int i = 0; i < generationSize; i++)
             {
                 inTrial[i] = new Brain(loadTrait);
