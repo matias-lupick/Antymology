@@ -6,19 +6,36 @@ public class EvolutionManager : Singleton<EvolutionManager>
 
     int generationSize = 12;
     int onTrial = -1;
+    int generationCount = 0;
 
     [SerializeField] float probability = 0.01f;
     [SerializeField] float additive = 0.2f;
     [SerializeField] float multiplicative = 0.3f;
+
+    [SerializeField] bool logResults = true;
+
+    [SerializeField] string loadTrait = "";
+    [SerializeField] string saveTrait = "";
+    [SerializeField] bool saveAtEnd = false;
 
     void Start()
     {
         //scores = new int[generationSize];
         inTrial = new Brain[generationSize];
 
-        for (int i = 0; i < generationSize; i++) 
+        if (loadTrait == "")
         {
-            inTrial[i] = new Brain();
+            for (int i = 0; i < generationSize; i++)
+            {
+                inTrial[i] = new Brain();
+            }
+        }
+        else 
+        {
+            for (int i = 0; i < generationSize; i++)
+            {
+                inTrial[i] = new Brain(loadTrait);
+            }
         }
     }
 
@@ -47,6 +64,7 @@ public class EvolutionManager : Singleton<EvolutionManager>
 
         Brain[] nextGen = new Brain[generationSize];
 
+        generationCount += 1;
 
         for (int i = 0; i < generationSize / 3; i++) 
         {
@@ -67,8 +85,17 @@ public class EvolutionManager : Singleton<EvolutionManager>
 
             if (i == 0) 
             {
-                Debug.Log("End of Generation");
-                Debug.Log("Best: " + high);
+                if (logResults)
+                {
+                    Debug.Log("End of Generation " + generationCount);
+                    Debug.Log("Best: " + high);
+                }
+
+                if (saveAtEnd) 
+                {
+                    inTrial[highInd].Save(saveTrait);
+                    saveAtEnd = false;
+                }
             }
 
             inTrial[highInd].Reset();

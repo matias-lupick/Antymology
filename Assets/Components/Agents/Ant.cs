@@ -53,6 +53,9 @@ public class Ant : MonoBehaviour, Tickable
 
     public void Tick() 
     {
+        if (health < 0)
+            return;
+
         Action action;
 
         health += -ageRate;
@@ -224,7 +227,10 @@ public class Ant : MonoBehaviour, Tickable
         if (TimeManager.Instance != null)
             TimeManager.Instance.tickables.Remove(this);
 
-        if (TimeManager.Instance != null)
+        if (AntManager.Instance != null)
             AntManager.Instance.ants.Remove(this);
+
+        if (isQueen && AntManager.Instance != null)
+            AntManager.Instance.queenDead = true;
     }
 }

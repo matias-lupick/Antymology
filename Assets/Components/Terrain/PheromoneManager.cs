@@ -22,7 +22,7 @@ public class PheromoneManager : Singleton<PheromoneManager>, Tickable
     public void Tick() 
     {
         return;
-        for (int pheromone = 0; pheromone < (int)PheromoneType.size; pheromone++) {
+        /*for (int pheromone = 0; pheromone < (int)PheromoneType.size; pheromone++) {
 
             Diffuse(pheromone, 0, 0, 1);
             Diffuse(pheromone, 0, 0, -1);
@@ -56,7 +56,7 @@ public class PheromoneManager : Singleton<PheromoneManager>, Tickable
                     ((AirBlock)active).pheromoneDeposits[-pheromone] = 0;
                 }
             }
-        }
+        }*/
     }
 
     ///diffuses a pheremone along the specified direction

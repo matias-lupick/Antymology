@@ -9,6 +9,7 @@ public class AntManager : Singleton<AntManager>, Tickable
 
     public int nests = 0;
     public int eaten = 0;
+    public bool queenDead = false;
 
     bool beenReset = true;
 
@@ -20,7 +21,7 @@ public class AntManager : Singleton<AntManager>, Tickable
     void Update() 
     {
         //Check end
-        if (ants.Count == 0)
+        if (queenDead)
         {
             if (!beenReset) {
                 beenReset = true;
@@ -75,6 +76,13 @@ public class AntManager : Singleton<AntManager>, Tickable
         //Set block
         foreach (Ant active in ants)
         {
+            if (WorldManager.Instance.GetBlock(active.Pos() + Vector3Int.up)
+                is not AirBlock)
+            {
+                Destroy(active.gameObject, 0.001f);
+                continue;
+            }
+
             active.airBlock = (AirBlock)WorldManager.Instance.GetBlock(active.Pos() + Vector3Int.up);
             active.groundBlock = WorldManager.Instance.GetBlock(active.Pos());
         }
@@ -82,10 +90,18 @@ public class AntManager : Singleton<AntManager>, Tickable
 
     public void Reset() 
     {
+        foreach (Ant active in ants)
+        {
+            Destroy(active.gameObject);
+        }
+
         EvolutionManager.Instance.ReportScore(nests * 1000 + eaten);
         nests = 0;
         eaten = 0;
+        queenDead = false;
         WorldManager.Instance.GenerateWorld();
+
+        
     }
 
     public void SetBrain(Brain brain) 

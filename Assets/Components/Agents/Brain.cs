@@ -1,5 +1,10 @@
 using UnityEngine;
 using Antymology.Terrain;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class Brain
 {
@@ -47,6 +52,20 @@ public class Brain
         layers[layers.Length - 1].output = output;
     }
 
+    public Brain(string path) 
+    {
+        SBrainLayer layer = SBrainLayer.Load(path);
+
+        input = new float[memorySize + (int)PheromoneType.size + trueInputSize];
+        output = new float[(int)Ant.Action.size + memorySize];
+
+        layers = new BrainLayer[1];
+        layers[0] = new BrainLayer(input, output);
+        layers[0].weights = layer.weights;
+        layers[0].bias = layer.bias;
+        layers[0].InitRandom();
+    }
+
     public Brain Clone() 
     {
         Brain v = new Brain(this);
@@ -57,6 +76,12 @@ public class Brain
         v.layers[layers.Length - 1].output = v.output;
 
         return v;
+    }
+
+    public void Save(string path) 
+    {
+        new SBrainLayer(layers[0]).Save(path);
+        Debug.Log("Saved to: " + path);
     }
 
     public Ant.Action GetAction(Ant d) 
@@ -85,7 +110,7 @@ public class Brain
         input[count++] = d.IsCliff() ? 1f : 0f;
         input[count++] = d.IsOpen() ? 1f : 0f;
         input[count++] = (float)d.health / d.maxHealth;
-        input[count++] = Random.Range(0f, 1f);
+        input[count++] = UnityEngine.Random.Range(0f, 1f);
 
         for (int i = 0; i < layers.Length; i++) 
         {
@@ -186,11 +211,11 @@ public class Brain
         {
             for (int i = 0; i < outSize; i++) 
             {
-                bias[i] = Random.Range(0f, 0.01f);
+                bias[i] = UnityEngine.Random.Range(0f, 0.01f);
 
                 for (int j = 0; j < inSize; j++)
                 {
-                    weights[j, i] = Random.Range(0f, 0.01f);
+                    weights[j, i] = UnityEngine.Random.Range(0f, 0.01f);
                 }
             }
         }
@@ -231,16 +256,52 @@ public class Brain
         {
             for (int i = 0; i < outSize; i++)
             {
-                if (Random.Range(0f, 1f) < probability)
-                    bias[i] = bias[i] * (1f + Random.Range(-mult, mult)) + 
-                        Random.Range(-add, add);
+                if (UnityEngine.Random.Range(0f, 1f) < probability)
+                    bias[i] = bias[i] * (1f + UnityEngine.Random.Range(-mult, mult)) +
+                        UnityEngine.Random.Range(-add, add);
 
                 for (int j = 0; j < inSize; j++)
                 {
-                    weights[j, i] = weights[j, i] * (1f + Random.Range(-mult, mult)) +
-                        Random.Range(-add, add);
+                    weights[j, i] = weights[j, i] * (1f + UnityEngine.Random.Range(-mult, mult)) +
+                        UnityEngine.Random.Range(-add, add);
                 }
             }
+        }
+    }
+
+    [System.Serializable]
+    public class SBrainLayer 
+    {
+        public float[,] weights;
+        public float[] bias;
+
+        public SBrainLayer(BrainLayer a) 
+        {
+            weights = a.weights;
+            bias = a.bias;
+        }
+
+        public void Save(string path) 
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Create(FullPath(path));
+            bf.Serialize(file, this);
+            file.Close();
+        }
+
+        public static SBrainLayer Load(string path)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(FullPath(path), FileMode.Open);
+            SBrainLayer data = (SBrainLayer)bf.Deserialize(file);
+            file.Close();
+
+            return data;
+        }
+
+        private static string FullPath(string path) 
+        {
+            return Application.dataPath + "/" + "Brain" + "/" + path;
         }
     }
 }

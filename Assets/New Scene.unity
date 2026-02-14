@@ -484,7 +484,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EvolutionManager
   probability: 0.03
   additive: 0.1
-  multiplicative: 0.2
+  multiplicative: 0.75
+  logResults: 1
 --- !u!4 &762157811
 Transform:
   m_ObjectHideFlags: 0
@@ -811,7 +812,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeManager
   secondsPerFrame: 1
-  ticksPerFrame: 50
+  ticksPerFrame: 60
   timePerTick: 0
   changeTickRate: 0
   go: 1
@@ -964,6 +965,7 @@ MonoBehaviour:
   ants: []
   nests: 0
   eaten: 0
+  queenDead: 0
 --- !u!4 &1574227370
 Transform:
   m_ObjectHideFlags: 0

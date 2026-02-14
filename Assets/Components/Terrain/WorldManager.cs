@@ -90,12 +90,12 @@ namespace Antymology.Terrain
         /// </summary>
         private void GenerateAnts()
         {
-            int antCount = 10;
+            int antCount = 5;
             Vector3Int antPosition = new Vector3Int(
                 Blocks.GetLength(0) / 2, Blocks.GetLength(1), Blocks.GetLength(2) / 2);
 
             //Debug.Log(Blocks.GetLength(1));
-            for (int i = 0; i < antCount - 1; i++)
+            for (int i = 0; i < antCount; i++)
             {
                 antPosition = new Vector3Int(antPosition.x, Blocks.GetLength(1), antPosition.z);
                 for (int y = 1; y < Blocks.GetLength(1); y++)
