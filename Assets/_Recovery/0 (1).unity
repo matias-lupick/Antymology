@@ -555,8 +555,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeManager
   secondsPerFrame: 1
-  ticksPerFrame: 50
-  timePerTick: 0
+  ticksPerFrame: 1
+  timePerTick: 0.1
   changeTickRate: 0
   go: 1
 --- !u!4 &1170860277

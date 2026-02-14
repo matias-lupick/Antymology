@@ -9,6 +9,7 @@ public class ConfigurationManager : Singleton<ConfigurationManager>
     /// The seed for world generation.
     /// </summary>
     public int Seed = 1337;
+    public bool progressSeed = false;
 
     /// <summary>
     /// The number of chunks in the x and z dimension of the world.

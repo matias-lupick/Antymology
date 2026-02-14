@@ -120,17 +120,12 @@ namespace Antymology.Terrain
 
         public void GenerateWorld() 
         {
-            //int score = 0;
-
             for (int x = 0; x < Blocks.GetLength(0); x++)
                 for (int y = 0; y < Blocks.GetLength(1); y++)
                     for (int z = 0; z < Blocks.GetLength(2); z++)
                     {
-                        //if (Blocks[x, y, z] is NestBlock)
-                        //    score++;
                         Blocks[x, y, z] = new AirBlock();
                     }
-            //EvolutionManager.Instance.ReportScore(score * 1000);
 
             // Generate new random number generator
             RNG = new System.Random(ConfigurationManager.Instance.Seed);

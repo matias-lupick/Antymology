@@ -178,6 +178,13 @@ public class Ant : MonoBehaviour, Tickable
         return false;
     }
 
+    public bool IsOpen() 
+    {
+        Vector3Int pos = Pos() + new Vector3Int(facingX, 0, facingZ);
+
+        return WorldManager.Instance.GetBlock(pos + Vector3Int.up) is not AirBlock;
+    }
+
     protected void TurnLeft() 
     {
         int v = facingZ;

@@ -18,12 +18,12 @@ public class Brain
     /// </summary>
     public int score = -1;
 
-    int trueInputSize = 8;
+    int trueInputSize = 9;
 
     public Brain() 
     {
         //3 for block type, 1 for random, 1 for hunger,
-        //1 for is queen, 1 for neighbor, 1 for cliff
+        //1 for is queen, 1 for neighbor, 1 for cliff, 1 for wall
         input = new float[memorySize + (int)PheromoneType.size + trueInputSize];
         output = new float[(int)Ant.Action.size + memorySize];
 
@@ -83,6 +83,7 @@ public class Brain
         input[count++] = d.isQueen ? 1f : 0f;
         input[count++] = d.other == null ? 1f : 0f;
         input[count++] = d.IsCliff() ? 1f : 0f;
+        input[count++] = d.IsOpen() ? 1f : 0f;
         input[count++] = (float)d.health / d.maxHealth;
         input[count++] = Random.Range(0f, 1f);
 

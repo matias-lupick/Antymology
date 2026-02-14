@@ -86,5 +86,8 @@ public class EvolutionManager : Singleton<EvolutionManager>
         }
 
         inTrial = nextGen;
+
+        if (ConfigurationManager.Instance.progressSeed)
+            ConfigurationManager.Instance.Seed += 1;
     }
 }
