@@ -1,5 +1,6 @@
 ## Matias Lupick Feb 13 2026
 ## Gitlab link: https://csgit.ucalgary.ca/matias.lupick/cpsc565as3
+## Github link: https://github.com/matias-lupick/Antymology
 
 
 ## Antymology
